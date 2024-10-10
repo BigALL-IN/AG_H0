@@ -43,7 +43,7 @@ double Eval(bitstring vc) {
 	double num = Convert(vc);
 	int vs = vc.size(); // vector size
 	int cs = vs / settings.d; //chunk size
-	std::vector<double> results;
+	std::vector<double> results(settings.d);
 	bitstring aux;
 	for (int i = 0; i < settings.d; ++i) {
 		aux.clear();
