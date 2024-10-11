@@ -40,14 +40,14 @@ double Convert(bitstring vc) {
 }
 
 double Eval(bitstring vc) {
-	double num = Convert(vc);
+	//double num = Convert(vc);
 	int vs = vc.size(); // vector size
 	int cs = vs / settings.d; //chunk size
 	std::vector<double> results(settings.d);
 	bitstring aux;
 	for (int i = 0; i < settings.d; ++i) {
 		aux.clear();
-		for (int j = i * cs; j < cs; ++j) {
+		for (int j = i * cs; j < cs+cs*i; ++j) {
 			aux.push_back(vc[j]);
 		}
 		results[i] = Convert(aux);
@@ -64,24 +64,24 @@ std::vector<bitstring> Neighbourhood(bitstring vc) {
 	return neigh;
 }
 
-bitstring Improve(bitstring vc, std::vector<bitstring> neigh, bool impr) {
-	double init = Eval(vc);
+bitstring Improve(std::vector<bitstring> neigh, bool impr) {
+	double init = Eval(neigh[0]);
 	switch (impr) {
 	case 0:
-		for (int i = 0; i < neigh.size(); i++) {
+		for (int i = 1; i < neigh.size(); i++) {
 			double candidate = Eval(neigh[i]);
-			if (init < candidate) {
+			if (init > candidate) {
 				return neigh[i];
 			}
 		}
-		return vc;  
+		return neigh[0];  
 		break;
 
 	case 1:
-		bitstring vn = vc;
-		for (int i = 0; i < neigh.size(); i++) {
+		bitstring vn = neigh[0];
+		for (int i = 1; i < neigh.size(); i++) {
 			double candidate = Eval(neigh[i]);
-			if (init < candidate) {
+			if (init > candidate) {
 				init = candidate;
 				vn = neigh[i];
 			}
@@ -92,20 +92,24 @@ bitstring Improve(bitstring vc, std::vector<bitstring> neigh, bool impr) {
 }
 
 
-void main() {
+int main() {
 	int t = 0;
 	bitstring best = Gen_num();
+	int counter = 0;
 	double bestcandidate = Eval(best);
 	while (t < settings.it) {
-		bool local = false;
+		
+
+		bool reachedLocal = false;
 		bitstring vc = Gen_num();
 		double initcandidate = Eval(vc);
-		while (!local) {
-			bitstring vn = Improve(vc, Neighbourhood(vc), 0);
+		while (!reachedLocal) {
+			std::cout << "loop count: "<< ++counter << "\n";
+			bitstring vn = Improve(Neighbourhood(vc), 1);
 			if (Eval(vn) < initcandidate) {
 				vc = vn;
 			}
-			else local = true;
+			else reachedLocal = true;
 		} 
 		t++;
 		double testcandidate = Eval(vc);
@@ -113,7 +117,11 @@ void main() {
 			best = vc;
 			bestcandidate = testcandidate;
 		}
+		std::cout << "#" << t << " " << "candidate: " << bestcandidate << "\n";
+
+	
 	}
+	return 0;
 }
 
 

@@ -7,10 +7,11 @@ double Rastrigin(std::vector<double> v) {
 		res += v[i] * v[i] - 10 * cos(2 * M_PI * v[i]);
 	}
 	return res;
+
 }
 
 double Michalewicz(std::vector<double> v) {
-	double res;
+	double res = 0;
 	for (int i = 0; i <v.size(); i++) {
 		res += sin(v[i]) * pow(sin((i * v[i] * v[i]) / M_PI), 20);
 	}
@@ -18,7 +19,7 @@ double Michalewicz(std::vector<double> v) {
 }
 
 double Sphere(std::vector<double> v) {
-	double res;
+	double res = 0;
 	for (int i = 0; i < v.size(); i++) {
 		res += v[i]*v[i];
 	}
@@ -26,7 +27,7 @@ double Sphere(std::vector<double> v) {
 }
 
 double Sumsq(std::vector<double> v) {
-	double res;
+	double res = 0;
 	for (int i = 0; i < v.size(); i++) {
 		res += (i+1)*v[i] * v[i];
 	}
