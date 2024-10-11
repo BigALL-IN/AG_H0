@@ -2,9 +2,12 @@
 #include <iostream>
 #include <cmath>
 #include <random>
+#include <iomanip>
+
 #include "functions.h"
 #include "params.h"
 using bitstring = std::vector<bool>;
+
 std::random_device rd;
 std::mt19937 gen(rd());
 std::bernoulli_distribution dis(0.5);
@@ -13,7 +16,7 @@ params settings;
 int Nbit() {
 	int N = (settings.b - settings.a) * pow(10, settings.p);
 	int bits = static_cast<int>(std::ceil(log2(N)));
-	
+
 	return bits;
 }
 
@@ -22,7 +25,7 @@ int Cbit() {
 	return bit * settings.d;
 }
 
-bitstring Gen_num(){
+bitstring Gen_num() {
 	int bitcount = Cbit();
 	bitstring vc(bitcount);
 	for (int i = 0; i < vc.size(); i++) {
@@ -47,7 +50,7 @@ double Eval(bitstring vc) {
 	bitstring aux;
 	for (int i = 0; i < settings.d; ++i) {
 		aux.clear();
-		for (int j = i * cs; j < cs+cs*i; ++j) {
+		for (int j = i * cs; j < cs + cs * i; ++j) {
 			aux.push_back(vc[j]);
 		}
 		results[i] = Convert(aux);
@@ -64,20 +67,22 @@ std::vector<bitstring> Neighbourhood(bitstring vc) {
 	return neigh;
 }
 
-bitstring Improve(std::vector<bitstring> neigh, bool impr) {
-	double init = Eval(neigh[0]);
+bitstring Improve(std::vector<bitstring> neigh, bitstring vc, bool impr) {
+	double init;
 	switch (impr) {
 	case 0:
-		for (int i = 1; i < neigh.size(); i++) {
+		init = Eval(vc);
+		for (int i = 0; i < neigh.size(); i++) {
 			double candidate = Eval(neigh[i]);
 			if (init > candidate) {
 				return neigh[i];
 			}
 		}
-		return neigh[0];  
+		return vc;
 		break;
 
 	case 1:
+		init = Eval(neigh[0]);
 		bitstring vn = neigh[0];
 		for (int i = 1; i < neigh.size(); i++) {
 			double candidate = Eval(neigh[i]);
@@ -86,7 +91,7 @@ bitstring Improve(std::vector<bitstring> neigh, bool impr) {
 				vn = neigh[i];
 			}
 		}
-		return vn;  
+		return vn;
 		break;
 	}
 }
@@ -95,32 +100,41 @@ bitstring Improve(std::vector<bitstring> neigh, bool impr) {
 int main() {
 	int t = 0;
 	bitstring best = Gen_num();
-	int counter = 0;
 	double bestcandidate = Eval(best);
 	while (t < settings.it) {
-		
+		int counter = 0;
 
 		bool reachedLocal = false;
 		bitstring vc = Gen_num();
-		double initcandidate = Eval(vc);
-		while (!reachedLocal) {
-			std::cout << "loop count: "<< ++counter << "\n";
-			bitstring vn = Improve(Neighbourhood(vc), 1);
+		double initcandidate;
+		do {
+			initcandidate = Eval(vc);
+			std::cout << "loop count: " << ++counter << "\n";
+			bitstring vn = Improve(Neighbourhood(vc), vc, 0);
+
 			if (Eval(vn) < initcandidate) {
 				vc = vn;
 			}
-			else reachedLocal = true;
-		} 
+			else {
+				reachedLocal = true;
+			}
+
+			std::cout << "\ninitcandidate: " << initcandidate << "\n";
+
+		} while (!reachedLocal);
 		t++;
 		double testcandidate = Eval(vc);
 		if (testcandidate < bestcandidate) {
 			best = vc;
 			bestcandidate = testcandidate;
 		}
-		std::cout << "#" << t << " " << "candidate: " << bestcandidate << "\n";
 
-	
+		std::cout << "\n\n\n" << t << " ------- " << bestcandidate << "\n\n\n";
+
 	}
+
+	std::cout << "#" << t << " " << "candidate: " << bestcandidate << "\n";
+
 	return 0;
 }
 
