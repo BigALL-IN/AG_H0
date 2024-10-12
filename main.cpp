@@ -8,6 +8,14 @@
 
 #include "functions.h"
 #include "params.h"
+
+#include<chrono>
+#include<fstream>
+
+std::ofstream out("Date.out");
+
+
+
 using bitstring = std::vector<bool>;
 
 std::random_device rd;
@@ -18,7 +26,7 @@ params settings;
 int Nbit() {
     int N = (settings.b - settings.a) * pow(10, settings.p);
     int bits = static_cast<int>(std::ceil(log2(N)));
-    
+
     return bits;
 }
 
@@ -27,7 +35,7 @@ int Cbit() {
     return bit * settings.d;
 }
 
-bitstring Gen_num(){
+bitstring Gen_num() {
     int bitcount = Cbit();
     bitstring vc(bitcount);
     for (int i = 0; i < vc.size(); i++) {
@@ -52,12 +60,12 @@ double Eval(bitstring vc) {
     bitstring aux;
     for (int i = 0; i < settings.d; ++i) {
         aux.clear();
-        for (int j = i * cs; j < cs+cs*i; ++j) {
+        for (int j = i * cs; j < cs + cs * i; ++j) {
             aux.push_back(vc[j]);
         }
         results[i] = Convert(aux);
     }
-    return Michalewicz(results);
+    return Sphere(results);
 }
 
 std::vector<bitstring> Neighbourhood(bitstring vc) {
@@ -80,7 +88,7 @@ bitstring Improve(std::vector<bitstring> neigh, bitstring vc, bool impr) {
                 return neigh[i];
             }
         }
-        return vc;  
+        return vc;
         break;
 
     case 1:
@@ -93,7 +101,7 @@ bitstring Improve(std::vector<bitstring> neigh, bitstring vc, bool impr) {
                 vn = neigh[i];
             }
         }
-        return vn;  
+        return vn;
         break;
     }
 }
@@ -116,47 +124,94 @@ double local_vc() {
             reachedLocal = true;
         }
 
+       /// std::cout << "I am computing\n";
+
     } while (!reachedLocal);
 
     return initcandidate;
 }
+
+
+
+
+
+void computeData() {
+    std::ifstream in("Date.out");
+    std::ofstream cmpOut("DataCmp.txt");
+
+    double a, bestResult = 1000000;
+    long double b, bestTime = 100000000000000, worstResult = 0, worstTime =0;
+
+    while (in >> a >> b) {
+        if (a < bestResult)
+            bestResult = a;
+        if (a > worstResult)
+            worstResult = a;
+
+        if (b < bestTime)
+            bestTime=b;
+        if (b > worstTime)
+            worstTime = b;
+
+    }
+    cmpOut << "Best Result: " << bestResult << '\n' << "Best Time: " << bestTime << '\n';
+    cmpOut << "Worst result: " << worstResult << '\n' << "Worst Time: " << worstTime;
+
+    in.close();
+    cmpOut.close();
+}
+
 
 int main()
 {
     int t = 0;
     bitstring best = Gen_num();
     double bestcandidate = Eval(best);
-    int nthreads = 100;
+    int nthreads = std::thread::hardware_concurrency();
 
-    while (t < settings.it) {
-        //https://stackoverflow.com/questions/7686939/c-simple-return-value-from-stdthread/7687116#7687116
-        std::vector<std::future<double>> futures(nthreads);
-        std::vector<double> candidates(nthreads);
+    int counter = 0;
 
-        for (int i = 0; i < nthreads; i++ ){
-            futures[i] = std::async(local_vc);
+    while (counter < 30) {
+
+        auto start = std::chrono::high_resolution_clock::now();
+
+        while (t < settings.it) {
+            //https://stackoverflow.com/questions/7686939/c-simple-return-value-from-stdthread/7687116#7687116
+            std::vector<std::future<double>> futures(nthreads);
+            std::vector<double> candidates(nthreads);
+
+            for (int i = 0; i < nthreads; i++) {
+                futures[i] = std::async(local_vc);
+            }
+
+
+            std::cout << "new candidates: ";
+            for (int i = 0; i < nthreads; i++) {
+                candidates[i] = futures[i].get();
+                // std::cout << candidates[i] << " ";
+            }
+
+            // https://www.geeksforgeeks.org/how-to-find-minimum-element-in-vector-in-cpp/
+            double minCandidate = *std::min_element(candidates.begin(), candidates.end());
+
+            if (minCandidate < bestcandidate) {
+                bestcandidate = minCandidate;
+            }
+
+            t += nthreads;
+            std::cout << "\n\n\n" << t << " ------- " << bestcandidate << " <=> " << minCandidate << "\n\n\n";
         }
 
+        std::cout << "#" << t << " " << "candidate: " << bestcandidate << "\n";
 
-        std::cout << "new candidates: ";
-        for (int i = 0; i < nthreads; i++ ){
-            candidates[i] = futures[i].get();
-            // std::cout << candidates[i] << " ";
-        }
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> duration = end - start;
+        out << bestcandidate << " " << duration.count()<<'\n';
 
-        // https://www.geeksforgeeks.org/how-to-find-minimum-element-in-vector-in-cpp/
-        double minCandidate = *std::min_element(candidates.begin(), candidates.end());
-
-        if (minCandidate < bestcandidate) {
-            bestcandidate = minCandidate;
-        }
-       
-        t += nthreads;
-        std::cout << "\n\n\n" << t << " ------- " << bestcandidate << " <=> " << minCandidate << "\n\n\n";
+        counter++;
     }
-    
-    std::cout << "#" << t << " " << "candidate: " << bestcandidate << "\n";
-    
+    out.close();
+    computeData();
     return 0;
 }
 
