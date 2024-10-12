@@ -135,43 +135,22 @@ double local_vc() {
 
 
 
-void computeData() {
-    std::ifstream in("Date.out");
-    std::ofstream cmpOut("DataCmp.txt");
-
-    double a, bestResult = 1000000;
-    long double b, bestTime = 100000000000000, worstResult = 0, worstTime =0;
-
-    while (in >> a >> b) {
-        if (a < bestResult)
-            bestResult = a;
-        if (a > worstResult)
-            worstResult = a;
-
-        if (b < bestTime)
-            bestTime=b;
-        if (b > worstTime)
-            worstTime = b;
-
-    }
-    cmpOut << "Best Result: " << bestResult << '\n' << "Best Time: " << bestTime << '\n';
-    cmpOut << "Worst result: " << worstResult << '\n' << "Worst Time: " << worstTime;
-
-    in.close();
-    cmpOut.close();
-}
 
 
 int main()
 {
-    int nthreads = std::thread::hardware_concurrency();
 
     int counter = 0;
-
     while (counter < 30) {
         int t = 0;
         bitstring best = Gen_num();
-        double bestcandidate = Eval(best)
+        double bestcandidate = Eval(best);
+        int nthreads = 1;
+
+        
+
+
+
         auto start = std::chrono::high_resolution_clock::now();
 
         while (t < settings.it) {
@@ -201,16 +180,18 @@ int main()
             std::cout << "\n\n\n" << t << " ------- " << bestcandidate << " <=> " << minCandidate << "\n\n\n";
         }
 
+        std::cout <<"Rezulatul: "<< counter<<"/30";
+        counter++;
         std::cout << "#" << t << " " << "candidate: " << bestcandidate << "\n";
 
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> duration = end - start;
         out << bestcandidate << " " << duration.count()<<'\n';
-
-        counter++;
+        out.flush();
+        
     }
     out.close();
-    computeData();
+    
     return 0;
 }
 
