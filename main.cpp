@@ -164,15 +164,14 @@ void computeData() {
 
 int main()
 {
-    int t = 0;
-    bitstring best = Gen_num();
-    double bestcandidate = Eval(best);
     int nthreads = std::thread::hardware_concurrency();
 
     int counter = 0;
 
     while (counter < 30) {
-
+        int t = 0;
+        bitstring best = Gen_num();
+        double bestcandidate = Eval(best)
         auto start = std::chrono::high_resolution_clock::now();
 
         while (t < settings.it) {
