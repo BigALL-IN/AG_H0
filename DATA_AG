@@ -1,0 +1,202 @@
+michalewicz_best_10d.log
+Best result: -9.65419
+Best Runtime: 416.104
+
+Average result: -9.54496
+Average Runtime: 424.096
+
+Worst result: -9.406
+Worst Runtime: 441.359
+
+-- michalewicz_best_2d.log
+Best result: -1.8013
+Best Runtime: 6.60425
+
+Average result: -1.8013
+Average Runtime: 6.66988
+
+Worst result: -1.8013
+Worst Runtime: 6.77391
+
+-- michalewicz_first_10d.log
+
+Best result: -9.52621
+Best Runtime: 269.221
+
+Average result: -9.43526
+Average Runtime: 275.021
+
+Worst result: -9.31173
+Worst Runtime: 286.482
+
+-- michalewicz_first_2d.log
+Best result: -1.8013
+Best Runtime: 4.6646
+
+Average result: -1.8013
+Average Runtime: 4.71813
+
+Worst result: -1.8013
+Worst Runtime: 4.78248
+
+--- rastring_best_10d.log
+
+Best result: 1.00001
+Best Runtime: 472.293
+
+Average result: 2.31922
+Average Runtime: 476.244
+
+Worst result: 3.4666
+Worst Runtime: 492.402
+
+-- rastring_best_2d.log
+
+Best result: 9.46009e-09
+Best Runtime: 6.66783
+
+Average result: 9.46009e-09
+Average Runtime: 6.76448
+
+Worst result: 9.46009e-09
+Worst Runtime: 7.05518|
+
+--- rastring_first_10d.log
+
+Best result: 1.98992
+Best Runtime: 318.891
+
+Average result: 3.94618
+Average Runtime: 337.722
+
+Worst result: 4.99499
+Worst Runtime: 353.357
+
+--- rastring_first_2d.log
+
+Best result: 9.46009e-09
+Best Runtime: 5.09264
+
+Average result: 9.46009e-09
+Average Runtime: 5.13681
+
+Worst result: 9.46009e-09
+Worst Runtime: 5.27866
+
+--- sphere_best_10d.log
+sample run 0
+	best candidate: 2.38419e-10
+	runtime: 616.812
+sample run 1
+	best candidate: 2.38419e-10
+	runtime: 601.339
+sample run 2
+	best candidate: 2.38419e-10
+	runtime: 609.35
+sample run 3
+	best candidate: 2.38419e-10
+	runtime: 608.948
+sample run 4
+	best candidate: 2.38419e-10
+	runtime: 607.842
+sample run 5
+	best candidate: 2.38419e-10
+	runtime: 591.487
+
+--- sphere_best_2d.log
+
+Best result: 4.76838e-11
+Best Runtime: 8.37554
+
+Average result: 4.76838e-11
+Average Runtime: 8.45058
+
+Worst result: 4.76838e-11
+Worst Runtime: 8.56522
+
+--- sphere_first_10d.log
+sample run 0
+	best candidate: 2.38419e-10
+	runtime: 362.604
+sample run 1
+	best candidate: 2.38419e-10
+	runtime: 358.256
+sample run 2
+	best candidate: 2.38419e-10
+	runtime: 362.676
+sample run 3
+	best candidate: 2.38419e-10
+	runtime: 383.209
+sample run 4
+	best candidate: 2.38419e-10
+	runtime: 390.231
+sample run 5
+	best candidate: 2.38419e-10
+	runtime: 393.723
+
+--- sphere_first_2d.log
+
+Best result: 4.76838e-11
+Best Runtime: 5.77093
+
+Average result: 4.76838e-11
+Average Runtime: 5.87302
+
+Worst result: 4.76838e-11
+Worst Runtime: 6.17774
+
+--- sumsq_best_10d.log
+sample run 0
+	best candidate: 1.25056e-09
+	runtime: 656.359
+sample run 1
+	best candidate: 1.25056e-09
+	runtime: 651.263
+sample run 2
+	best candidate: 1.25056e-09
+	runtime: 653.87
+sample run 3
+	best candidate: 1.25056e-09
+	runtime: 650.754
+sample run 4
+	best candidate: 1.25056e-09
+	runtime: 664.178
+
+--- sumsq_best_2d.log
+
+Best result: 6.82122e-11
+Best Runtime: 9.3263
+
+Average result: 6.82122e-11
+Average Runtime: 9.6779
+
+Worst result: 6.82122e-11
+Worst Runtime: 10.3615
+
+---- sumsq_first_10d.log
+sample run 0
+	best candidate: 1.25056e-09
+	runtime: 414.325
+sample run 1
+	best candidate: 1.25056e-09
+	runtime: 428.789
+sample run 2
+	best candidate: 1.25056e-09
+	runtime: 419.135
+sample run 3
+	best candidate: 1.25056e-09
+	runtime: 421.597
+sample run 4
+	best candidate: 1.25056e-09
+	runtime: 421.149
+
+--- sumsq_first_2d.log
+
+Best result: 6.82122e-11
+Best Runtime: 6.55252
+
+Average result: 6.82122e-11
+Average Runtime: 6.60515
+
+Worst result: 6.82122e-11
+Worst Runtime: 6.64996
